@@ -9,18 +9,21 @@ const router = express.Router();
 // 获取所有分类
 router.get("/getall", (req, res, next) => {
   //执行SQL命令，查询数据库中是否有用户名和密码同时满足的数据
-  pool.query("select * from bcategory", (err, r) => {
-    if (err) {
-      //如果SQL中出现错误，交给下一个错误处理中间件
-      return next(err);
+  pool.query(
+    "select bcategory.*,count(blog.cid) as count  from bcategory left join blog on bcategory.cid = blog.cid group By bcategory.cid",
+    (err, r) => {
+      if (err) {
+        //如果SQL中出现错误，交给下一个错误处理中间件
+        return next(err);
+      }
+      //结果是数组，如果是空数组登录失败，否则登录成功
+      if (r.length === 0) {
+        res.send({ code: 400, msg: "null", data: [] });
+      } else {
+        res.send({ code: 200, msg: "查询成功", data: r });
+      }
     }
-    //结果是数组，如果是空数组登录失败，否则登录成功
-    if (r.length === 0) {
-      res.send({ code: 400, msg: "null", data: [] });
-    } else {
-      res.send({ code: 200, msg: "查询成功", data: r });
-    }
-  });
+  );
 });
 
 // 添加一条分类

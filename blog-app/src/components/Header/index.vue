@@ -29,7 +29,7 @@ export default {
   name: "Header",
   data() {
     return {
-      active: 0,
+      active: null,
     };
   },
   watch: {
@@ -52,6 +52,7 @@ export default {
         //   break;
 
         default:
+          this.active = null;
           break;
       }
       if (this.$route.path.includes("/me")) {
@@ -70,7 +71,7 @@ export default {
 
 <style lang="scss" scoped>
 .header {
-  z-index: 100;
+  z-index: 2000;
   height: 7vh;
   background-color: rgba($color: #aaa, $alpha: 0.5);
   display: flex;

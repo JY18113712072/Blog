@@ -2,17 +2,29 @@
   <div class="add">
     <div class="info">
       <mavon-editor v-model="content" />
-      <el-button type="primary" size="default" @click="">提交</el-button>
+      <el-button type="primary" size="default" @click="addEssay">提交</el-button>
     </div>
   </div>
 </template>
 
 <script>
+import moment from "moment";
 export default {
   data() {
     return {
       content: "",
     };
+  },
+  methods: {
+    addEssay() {
+      let form = { createTime: moment().format("YYYY-MM-DD"), content: this.content };
+      this.$api.essay.reqAddEssay(form).then(res => {
+        if (res.data.code == 200) {
+          this.$message.success("添加成功");
+          this.$router.back();
+        }
+      });
+    },
   },
 };
 </script>

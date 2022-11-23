@@ -73,9 +73,14 @@ const routes = [
     component: () => import("@/views/Login"),
   },
   {
-    path: "/addBlog",
+    path: "/addBlog/:bid?",
     name: "addBlog",
     component: () => import("@/views/AddBlog"),
+  },
+  {
+    path: "/blogDetail/:bid",
+    name: "blogDetail",
+    component: () => import("@/views/BlogDetail"),
   },
   {
     path: "/addEssay",

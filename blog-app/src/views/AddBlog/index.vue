@@ -2,73 +2,120 @@
   <div class="add">
     <div class="info">
       <el-form :model="form" ref="form" :rules="rules">
-        <el-form-item label="">
+        <el-form-item label="" prop="title">
           <el-input v-model="form.title" placeholder="请输入博客标题"></el-input>
         </el-form-item>
 
-        <el-form-item>
+        <el-form-item prop="desc">
           <el-input type="textarea" v-model="form.desc" placeholder="简单描述一下吧"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-select v-model="form.category" placeholder="请选择分类">
-            <el-option :label="Vue" :value="vue"> Vue</el-option>
-            <el-option :label="aa" :value="aa"> aa</el-option>
-            <el-option :label="aa" :value="aa"> aa</el-option>
+        <el-form-item prop="category">
+          <el-select v-model="form.cid" placeholder="请选择分类">
+            <el-option :label="cname" :value="cid" v-for="{ cid, cname } in categoryList" :key="cid">
+            </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
-          <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
-            list-type="picture-card"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-          >
-            <i class="el-icon-plus"></i>
-          </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="" />
-          </el-dialog>
-        </el-form-item>
-        <el-form-item>
-          <el-checkbox-group v-model="form.tag">
-            <el-checkbox label="Vue" name="type"></el-checkbox>
-            <el-checkbox label="React" name="type"></el-checkbox>
-            <el-checkbox label="Javascript" name="type"></el-checkbox>
-            <el-checkbox label="html" name="type"></el-checkbox>
+
+        <el-form-item prop="tag">
+          <el-checkbox-group v-model="form.tname">
+            <el-checkbox
+              :label="tagName"
+              name="tag"
+              v-for="{ tagName } in tagList"
+              :key="tagName"
+            ></el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-form>
 
-      <mavon-editor v-model="content" />
-      <el-button type="primary" size="default" @click="">提交</el-button>
+      <mavon-editor v-model="form.content" @imgAdd="handleEditorImgAdd" @imgDel="handleEditorImgDel" />
+      <el-button type="primary" size="default" @click="onsubmit">提交</el-button>
     </div>
   </div>
 </template>
 
 <script>
+import moment from "moment";
 export default {
   data() {
     return {
       form: {
         title: "",
         desc: "",
-        category: "",
-        tag: [],
+        cid: "",
+        tname: [],
         createTime: "",
         content: "",
       },
-      dialogImageUrl: "",
-      dialogVisible: false,
+
+      rules: {
+        title: [
+          { required: true, message: "请输入标题", trigger: "blur" },
+          { min: 3, max: 50, message: "长度在 3 到 50 个字符", trigger: "blur" },
+        ],
+
+        category: [{ required: true, message: "请选择分类", trigger: "blur" }],
+        desc: [{ required: true, message: "请填写描述", trigger: "blur" }],
+      },
+      tagList: [],
+      categoryList: [],
     };
   },
   methods: {
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    // md编辑器上传图片
+    handleEditorImgAdd() {},
+    // md编辑器删除图片
+    handleEditorImgDel() {},
+
+    // 获取标签
+    async getTag() {
+      let { data } = await this.$api.blog.reqGetTag();
+      this.tagList = data.data;
     },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+    // 获取分类
+    async getCategory() {
+      let { data } = await this.$api.blog.reqGetCategory();
+      this.categoryList = data.data;
     },
+    // 提交博客
+    async onsubmit() {
+      // 天添加时间
+      this.form.createTime = moment().format("YYYY-MM-DD");
+      this.form.tname = JSON.stringify(this.form.tname);
+      // 如果路由存在bid就是更新
+      if (this.$route.params.bid) {
+        // 发送请求
+        let { data } = await this.$api.blog.reqUpdataBlog(this.form);
+        // 弹出提示
+        if (data.code == 200) {
+          this.$router.back();
+          this.$message.success("修改成功");
+        } else {
+          this.$message.error("修改失败");
+        }
+      } else {
+        // 发送请求添加
+        let { data } = await this.$api.blog.reqAddBlog(this.form);
+        // 弹出提示
+        if (data.code == 200) {
+          this.$router.back();
+          this.$message.success("添加成功");
+        } else {
+          this.$message.error("添加失败");
+        }
+      }
+    },
+  },
+  mounted() {
+    if (this.$route.params.bid) {
+      this.$api.blog.reqGetABlog(this.$route.params.bid).then(res => {
+        let result = res.data.data[0];
+        result.tname = JSON.parse(result.tname);
+        this.form = result;
+      });
+    }
+    this.getCategory();
+    this.getTag();
   },
 };
 </script>

@@ -13,20 +13,22 @@
         </el-form-item>
         <el-form-item>
           <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="http://127.0.0.1:3000/uploadPic"
             list-type="picture-card"
+            name="imgUpload"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
+            :on-success="onSuccess"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="" />
+            <img width="100%" :src="form.pid" alt="" />
           </el-dialog>
         </el-form-item>
       </el-form>
 
-      <mavon-editor v-model="content" />
+      <mavon-editor v-model="form.content" />
       <el-button type="primary" size="default" @click="">提交</el-button>
     </div>
   </div>
@@ -42,7 +44,9 @@ export default {
         technologyStack: "",
         createTime: "",
         content: "",
+        pic: "",
       },
+      dialogVisible: false,
     };
   },
   methods: {
@@ -50,8 +54,14 @@ export default {
       console.log(file, fileList);
     },
     handlePictureCardPreview(file) {
+      console.log(file);
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    onSuccess(response, file, fileList) {
+      // 图片上传成功,将图片路径返回并保存
+      console.log(response);
+      this.form.pic = response;
     },
   },
 };

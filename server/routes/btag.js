@@ -41,10 +41,9 @@ router.post("/add", (req, res, next) => {
 // 删除分类
 router.delete("/delete", (req, res, next) => {
   //获取post传递的参数
-  var tid = req.query.tid;
-  console.log(tid);
+  var tagName = req.query.tagName;
   //执行SQL命令，查询数据库中是否有用户名和密码同时满足的数据
-  pool.query("delete from btag where tid=?", [tid], (err, r) => {
+  pool.query("delete from btag where tagName=?", [tagName], (err, r) => {
     if (err) {
       //如果SQL中出现错误，交给下一个错误处理中间件
       return next(err);

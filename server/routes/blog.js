@@ -9,7 +9,7 @@ const router = express.Router();
 // 获取所有博客
 router.get("/getall", (req, res, next) => {
   //执行SQL命令，查询数据库中是否有用户名和密码同时满足的数据
-  pool.query("select * from blog", (err, r) => {
+  pool.query("select blog.*,cname from blog,bcategory where blog.cid = bcategory.cid", (err, r) => {
     if (err) {
       //如果SQL中出现错误，交给下一个错误处理中间件
       return next(err);

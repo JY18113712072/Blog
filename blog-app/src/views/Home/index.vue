@@ -4,83 +4,34 @@
       <header>
         <span class="title">全部博客</span>
         <div>
-          <p>共&nbsp;<span>93</span>&nbsp;篇</p>
+          <p>
+            共&nbsp;<span>{{ blogList.length }}</span
+            >&nbsp;篇
+          </p>
           <i class="el-icon-circle-plus-outline" @click="$router.push('/addBlog')"></i>
         </div>
       </header>
       <ul class="list">
-        <li>
-          <div class="pic"><img src="./images/1.jpg" alt="" /></div>
+        <li v-for="item in blogList" :key="item.bid" @click="goDetail(item.bid)">
           <div class="content">
-            <p class="title">##餐厅经营模拟实战游戏</p>
+            <p class="title">## &nbsp; {{ item.title }}</p>
             <p class="spec">
-              随机二次元背景，透明菜单栏，环绕边框动画，动态简介，动态下拉按钮。点击顶部半透明导航栏相应菜单可进行页面切换，博客搜索，用户登录和注册
+              {{ item.desc }}
             </p>
             <div class="about">
               <div class="left">
                 <div class="autor"><img src="./images/a.jpg" alt="" /><span>Saury</span></div>
-                <div class="date"><i class="el-icon-date"></i> <span>2022-11-11</span></div>
-                <div class="see"><i class="el-icon-view"></i> <span>200</span></div>
+                <div class="date">
+                  <i class="el-icon-date"></i> <span>{{ item.createTime }}</span>
+                </div>
+                <div class="see">
+                  <i class="el-icon-view"></i> <span>{{ item.watch }}</span>
+                </div>
               </div>
               <div class="right">
-                <el-tag type="success">web钱盾</el-tag>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="pic"><img src="./images/1.jpg" alt="" /></div>
-          <div class="content">
-            <p class="title">##餐厅经营模拟实战游戏</p>
-            <p class="spec">
-              随机二次元背景，透明菜单栏，环绕边框动画，动态简介，动态下拉按钮。点击顶部半透明导航栏相应菜单可进行页面切换，博客搜索，用户登录和注册
-            </p>
-            <div class="about">
-              <div class="left">
-                <div class="autor"><img src="./images/a.jpg" alt="" /><span>Saury</span></div>
-                <div class="date"><i class="el-icon-date"></i> <span>2022-11-11</span></div>
-                <div class="see"><i class="el-icon-view"></i> <span>200</span></div>
-              </div>
-              <div class="right">
-                <el-tag type="success">web钱盾</el-tag>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="pic"><img src="./images/1.jpg" alt="" /></div>
-          <div class="content">
-            <p class="title">##餐厅经营模拟实战游戏</p>
-            <p class="spec">
-              随机二次元背景，透明菜单栏，环绕边框动画，动态简介，动态下拉按钮。点击顶部半透明导航栏相应菜单可进行页面切换，博客搜索，用户登录和注册
-            </p>
-            <div class="about">
-              <div class="left">
-                <div class="autor"><img src="./images/a.jpg" alt="" /><span>Saury</span></div>
-                <div class="date"><i class="el-icon-date"></i> <span>2022-11-11</span></div>
-                <div class="see"><i class="el-icon-view"></i> <span>200</span></div>
-              </div>
-              <div class="right">
-                <el-tag type="success">web钱盾</el-tag>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="pic"><img src="./images/1.jpg" alt="" /></div>
-          <div class="content">
-            <p class="title">##餐厅经营模拟实战游戏</p>
-            <p class="spec">
-              随机二次元背景，透明菜单栏，环绕边框动画，动态简介，动态下拉按钮。点击顶部半透明导航栏相应菜单可进行页面切换，博客搜索，用户登录和注册
-            </p>
-            <div class="about">
-              <div class="left">
-                <div class="autor"><img src="./images/a.jpg" alt="" /><span>Saury</span></div>
-                <div class="date"><i class="el-icon-date"></i> <span>2022-11-11</span></div>
-                <div class="see"><i class="el-icon-view"></i> <span>200</span></div>
-              </div>
-              <div class="right">
-                <el-tag type="success">web钱盾</el-tag>
+                <el-tag style="margin-right: 5px" type="success" v-for="item in item.tname" :key="item">{{
+                  item
+                }}</el-tag>
               </div>
             </div>
           </div>
@@ -93,25 +44,10 @@
           <span>分类</span><i class="el-icon-circle-plus-outline" @click="addCategory = true"></i>
         </div>
         <ul>
-          <li>
+          <li v-for="item in categoryList" :key="item.cid">
             <img src="./images/a.jpg" alt="" />
-            <span>数据结构</span>
-            <span>55</span>
-          </li>
-          <li>
-            <img src="./images/a.jpg" alt="" />
-            <span>数据结构</span>
-            <span>55</span>
-          </li>
-          <li>
-            <img src="./images/a.jpg" alt="" />
-            <span>数据结构</span>
-            <span>55</span>
-          </li>
-          <li>
-            <img src="./images/a.jpg" alt="" />
-            <span>数据结构</span>
-            <span>55</span>
+            <span>{{ item.cname }}</span>
+            <span>{{ item.count }}</span>
           </li>
         </ul>
       </div>
@@ -120,10 +56,17 @@
           <span>标签</span> <i class="el-icon-circle-plus-outline" @click="addTag = true"></i>
         </div>
         <div class="content">
-          <el-tag type="success" effect="dark"> web钱盾 </el-tag>
-          <el-tag type="success" effect="dark"> 数据机构 </el-tag>
-          <el-tag type="success" effect="dark"> Java开发 </el-tag>
-          <el-tag type="success" effect="dark"> 数据库 </el-tag>
+          <el-tag
+            type="success"
+            effect="dark"
+            v-for="{ tagName } in tagList"
+            :key="tagName"
+            closable
+            :disable-transitions="false"
+            @close="deleteTag(tagName)"
+          >
+            {{ tagName }}
+          </el-tag>
         </div>
       </div>
     </div>
@@ -147,27 +90,121 @@
         </span>
       </el-dialog>
     </div>
+    <a href="#" class="el-icon-top gotop" v-show="!isTop"></a>
   </div>
 </template>
 
 <script>
+import moment from "moment";
 export default {
   name: "Home",
   data() {
     return {
+      // 添加分类弹出表示
       addCategory: false,
+      // 添加标签弹出标识
       addTag: false,
+      // 添加分类名字
       categoryName: "",
+      // 添加标签名字
       tagName: "",
+      // 博客列表
+      blogList: [],
+      // 标签列表
+      tagList: [],
+      // 分类列表
+      categoryList: [],
+
+      // 是否在顶部
+      isTop: true,
     };
   },
   methods: {
+    // 添加分类回调
     handleAddC() {
       this.addCategory = false;
+      this.$api.blog.reqAddCategory({ cname: this.categoryName }).then(res => {
+        if (res.data.code == 200) {
+          this.$message.success("添加成功");
+          this.getCategory();
+        }
+      });
     },
+    // 添加标签回调
     handleAddT() {
       this.addTag = false;
+      this.$api.blog.reqAddTag({ tagName: this.tagName }).then(res => {
+        if (res.data.code == 200) {
+          this.$message.success("添加成功");
+          this.getTag();
+        }
+      });
     },
+    // 删除标签的回调
+    deleteTag(tname) {
+      this.$confirm("真的要删除标签吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          // 发送请求删除博客
+          this.$api.blog.reqDeleteTag(tname).then(res => {
+            if (res.data.code == 200) {
+              // 删除成功跳转回首页
+              this.$message.success("删除成功啦");
+              this.getTag();
+            } else {
+              this.$message.error("删除失败");
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    // 获取博客数据回调
+    async getBlog() {
+      let { data } = await this.$api.blog.reqGetBlog();
+      data.data.forEach(item => {
+        item.createTime = moment(item.createTime).format("YYYY-MM-DD");
+        if (item.tname) {
+          item.tname = JSON.parse(item.tname);
+        }
+      });
+      this.blogList = data.data.reverse();
+    },
+    // 获取标签
+    async getTag() {
+      let { data } = await this.$api.blog.reqGetTag();
+      this.tagList = data.data;
+    },
+    // 获取分类
+    async getCategory() {
+      let { data } = await this.$api.blog.reqGetCategory();
+      this.categoryList = data.data;
+    },
+    // 查看博客详情
+    goDetail(bid) {
+      this.$router.push(`blogDetail/${bid}`);
+    },
+  },
+  mounted() {
+    this.getBlog();
+    this.getTag();
+    this.getCategory();
+
+    // 绑定滚动监听事件，滚动到顶部时不显示按钮
+    window.onscroll = () => {
+      if (window.scrollY === 0) {
+        this.isTop = true;
+      } else {
+        this.isTop = false;
+      }
+    };
   },
 };
 </script>
@@ -183,6 +220,7 @@ export default {
   justify-content: space-between;
   padding-top: 100px;
   padding-bottom: 20px;
+  position: relative;
   > .left {
     width: 75%;
     background-color: rgba($color: #fff, $alpha: 0.8);
@@ -219,23 +257,13 @@ export default {
       li {
         border-top: 1px solid rgba($color: #999, $alpha: 0.5);
         padding: 20px 10px;
-        display: flex;
-
-        .pic {
-          cursor: pointer;
-          display: flex;
-          align-items: flex-start;
-          > img {
-            border-radius: 7px;
-
-            width: 200px;
-          }
-        }
+        cursor: pointer;
         .content {
           margin-left: 10px;
           .title {
             color: #333;
             cursor: pointer;
+            font-weight: bold;
             &:hover {
               color: gold;
             }
@@ -246,6 +274,7 @@ export default {
             color: #666;
           }
           .about {
+            width: 100%;
             display: flex;
             justify-content: space-between;
             .left {
@@ -324,7 +353,7 @@ export default {
           display: flex;
           align-items: center;
 
-          padding: 10px 0;
+          padding: 10px 10px;
           border-bottom: 1px solid rgba($color: #666, $alpha: 0.5);
           span {
             font-size: 14px;
@@ -370,6 +399,24 @@ export default {
           margin: 0 10px 10px 0;
         }
       }
+    }
+  }
+  .gotop {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    background-color: #fff;
+    border-radius: 50%;
+    font-size: 28px;
+    color: #999;
+    &:hover {
+      color: rgb(255, 180, 6);
+      background-color: #999;
     }
   }
 }
