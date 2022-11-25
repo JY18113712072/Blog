@@ -14,6 +14,8 @@ export const reqDeleteTag = tname => request.delete(`btag/delete/?tagName=${tnam
 export const reqGetCategory = () => request.get("bcategory/getall");
 // 获取分类
 export const reqAddCategory = data => request.post("bcategory/add", data);
+// 删除分类
+export const reqDelCategory = cid => request.delete("bcategory/delete?cid=" + cid);
 // 添加博客
 export const reqAddBlog = data => request.post("blog/add", data);
 // 删除blog

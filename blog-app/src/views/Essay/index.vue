@@ -1,6 +1,6 @@
 <template>
   <div class="essay">
-    <a href="" class="add" @click.prevent="$router.push('/addEssay')">记一笔</a>
+    <a href="" class="add" @click.prevent="$router.push('/addEssay')" v-if="$store.state.token">记一笔</a>
     <el-timeline>
       <el-timeline-item
         :timestamp="item.createTime"
@@ -19,20 +19,26 @@
             :toolbarsFlag="false"
           >
           </mavon-editor>
-          <i class="el-icon-delete" @click="deleteEssay(item.eid)"></i>
+          <i class="el-icon-delete" @click="deleteEssay(item.eid)" v-if="$store.state.token"></i>
         </el-card>
       </el-timeline-item>
     </el-timeline>
+    <GoTop :isTop="isTop" />
   </div>
 </template>
 
 <script>
 import moment from "moment";
+import GoTop from "@/components/GoTop";
 export default {
   name: "Essay",
+  components: {
+    GoTop,
+  },
   data() {
     return {
       essayList: [],
+      isTop: true,
     };
   },
   methods: {
@@ -70,6 +76,14 @@ export default {
   },
   mounted() {
     this.getEssay();
+    // 监听滚轮事件
+    window.onscroll = () => {
+      if (window.scrollY === 0) {
+        this.isTop = true;
+      } else {
+        this.isTop = false;
+      }
+    };
   },
 };
 </script>
@@ -121,6 +135,24 @@ export default {
   cursor: pointer;
   &:hover {
     color: gold;
+  }
+}
+.gotop {
+  position: fixed;
+  bottom: 50px;
+  right: 150px;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  background-color: #fff;
+  border-radius: 50%;
+  font-size: 28px;
+  color: #999;
+  &:hover {
+    color: rgb(255, 180, 6);
+    background-color: #999;
   }
 }
 </style>

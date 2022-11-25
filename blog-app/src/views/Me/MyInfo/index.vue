@@ -17,6 +17,14 @@
         <el-col :span="6" :offset="0">现居地: </el-col>
         <el-col :span="18" :offset="0">成都</el-col>
       </el-row>
+      <el-row :gutter="20">
+        <el-col :span="6" :offset="0">Gitee: </el-col>
+        <el-col :span="18" :offset="0">https://gitee.com/xiaoxiaojina</el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="6" :offset="0">GitHub: </el-col>
+        <el-col :span="18" :offset="0">https://github.com/JY18113712072</el-col>
+      </el-row>
     </div>
     <div class="right">
       <div class="box">
@@ -39,8 +47,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+body::-webkit-scrollbar {
+  display: none;
+}
 .info {
-  height: 100%;
+  // box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   .left {
@@ -49,27 +60,31 @@ export default {
     width: 40%;
     background-color: rgba($color: #fff, $alpha: 0.7);
     border-radius: 10px;
+    word-wrap: break-word;
+    // table-layout: fixed;
+    word-break: break-all;
     .el-row {
       margin-top: 20px;
+      font-weight: bolder;
     }
   }
   .right {
     box-sizing: border-box;
     padding: 20px;
-    width: 58%;
+    width: 55%;
     background-color: rgba($color: #fff, $alpha: 0.4);
     border-radius: 10px;
     .box {
+      box-sizing: border-box;
       margin: 0 auto;
       display: grid;
-      grid-template-rows: repeat(4, 110px);
-      grid-template-columns: repeat(6, 95px);
-
-      grid-template-areas:
-        "a a a a b b"
-        "a a a a c c"
-        "d d e e c c"
-        "d d f f g g";
+      grid-template-rows: repeat(4, 20%);
+      grid-template-columns: repeat(6, 15%);
+      // grid-template-areas:
+      //   "a a a a b b"
+      //   "a a a a c c"
+      //   "d d e e c c"
+      //   "d d f f g g";
 
       grid-gap: 10px 10px;
     }

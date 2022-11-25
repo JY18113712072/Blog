@@ -18,9 +18,15 @@
         <i class="el-icon-potato-strips"></i><span>关于我</span>
       </li>
     </ul>
-    <div class="right">
+    <div class="right" v-if="!$store.state.token">
       <a href="" @click.prevent="$router.push('/login')">Login</a>
     </div>
+    <el-dropdown class="right" style="background-color: transparent" v-else>
+      <img style="width: 30px; border-radius: 50%" src="./images/a.jpg" alt="" />
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item style="color: red" @click.native="logout">退出</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
   </header>
 </template>
 
@@ -64,6 +70,10 @@ export default {
     goNav(path, val) {
       this.active = val;
       this.$router.push(path);
+    },
+    logout() {
+      this.$store.commit("Logout");
+      localStorage.removeItem("token");
     },
   },
 };

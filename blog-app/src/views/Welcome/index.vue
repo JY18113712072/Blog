@@ -14,6 +14,7 @@ export default {
 
 <style lang="scss" scoped>
 .welcome {
+  animation: go 2s infinite;
   box-sizing: border-box;
   min-height: 92vh;
   margin: 4vh;
@@ -59,6 +60,14 @@ export default {
       font-size: 24px;
       line-height: 50px;
     }
+  }
+}
+@keyframes go {
+  from {
+    transform: translate(0);
+  }
+  to {
+    transform: translateY(-10px);
   }
 }
 </style>

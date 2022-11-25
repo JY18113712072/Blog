@@ -1,5 +1,5 @@
 <template>
-  <div class="add">
+  <div class="add" ref="blog">
     <div class="info">
       <el-form :model="form" ref="form" :rules="rules">
         <el-form-item label="" prop="title">
@@ -28,7 +28,12 @@
         </el-form-item>
       </el-form>
 
-      <mavon-editor v-model="form.content" @imgAdd="handleEditorImgAdd" @imgDel="handleEditorImgDel" />
+      <mavon-editor
+        ref="md"
+        v-model="form.content"
+        @imgAdd="handleEditorImgAdd"
+        @imgDel="handleEditorImgDel"
+      />
       <el-button type="primary" size="default" @click="onsubmit">提交</el-button>
     </div>
   </div>
@@ -36,6 +41,7 @@
 
 <script>
 import moment from "moment";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -47,7 +53,7 @@ export default {
         createTime: "",
         content: "",
       },
-
+      // 表单校验规则
       rules: {
         title: [
           { required: true, message: "请输入标题", trigger: "blur" },
@@ -59,13 +65,31 @@ export default {
       },
       tagList: [],
       categoryList: [],
+      isTop: true,
     };
   },
   methods: {
-    // md编辑器上传图片
-    handleEditorImgAdd() {},
-    // md编辑器删除图片
-    handleEditorImgDel() {},
+    // md添加图片
+    handleEditorImgAdd(pos, $file) {
+      var formdata = new FormData();
+      formdata.append("imgUpload", $file);
+      axios
+        .post("http://127.0.0.1:3000/uploadPic", formdata, {
+          headers: {
+            "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundaryBpq2BI1u5l04wDAq",
+            // name: "imgUpload",
+          },
+        })
+        .then(response => {
+          console.log(response);
+          // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+          if (response.status === 200) {
+            var url = "http://127.0.0.1:3000/" + response.data;
+            this.$refs.md.$img2Url(pos, url);
+          }
+        });
+    },
+    handleEditorImgDel(pos) {},
 
     // 获取标签
     async getTag() {
@@ -105,6 +129,12 @@ export default {
         }
       }
     },
+    //
+    goBottom() {
+      console.log(window);
+      console.dir(this.$refs.blog);
+      // window.scrollTop = this.$refs.blog.clientHeight;
+    },
   },
   mounted() {
     if (this.$route.params.bid) {
@@ -116,17 +146,27 @@ export default {
     }
     this.getCategory();
     this.getTag();
+
+    // 绑定滚动监听事件，滚动到顶部时不显示按钮
+    window.onscroll = () => {
+      if (window.scrollY === 0) {
+        this.isTop = true;
+      } else {
+        this.isTop = false;
+      }
+    };
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .add {
-  padding-top: 60px;
+  padding-top: 80px;
   box-sizing: border-box;
   width: 1200px;
   min-height: 100vh;
   margin: 0 auto;
+  position: relative;
   .info {
     border-radius: 10px;
     background-color: rgba($color: #fff, $alpha: 0.7);

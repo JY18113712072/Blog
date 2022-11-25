@@ -18,9 +18,24 @@ const routes = [
     component: () => import("@/views/Home"),
   },
   {
+    path: "/addBlog/:bid?",
+    name: "addBlog",
+    component: () => import("@/views/AddBlog"),
+  },
+  {
+    path: "/blogDetail/:bid",
+    name: "blogDetail",
+    component: () => import("@/views/BlogDetail"),
+  },
+  {
     path: "/essay",
     name: "Essay",
     component: () => import("@/views/Essay"),
+  },
+  {
+    path: "/addEssay",
+    name: "addEssay",
+    component: () => import("@/views/AddEssay"),
   },
   {
     path: "/note",
@@ -31,6 +46,16 @@ const routes = [
     path: "/project",
     name: "Project",
     component: () => import("@/views/Project"),
+  },
+  {
+    path: "/projectDetail/:pid",
+    name: "projectDetail",
+    component: () => import("@/views/ProjectDetail"),
+  },
+  {
+    path: "/addProject/:pid?",
+    name: "addProject",
+    component: () => import("@/views/AddProject"),
   },
   {
     path: "/me",
@@ -72,26 +97,7 @@ const routes = [
     },
     component: () => import("@/views/Login"),
   },
-  {
-    path: "/addBlog/:bid?",
-    name: "addBlog",
-    component: () => import("@/views/AddBlog"),
-  },
-  {
-    path: "/blogDetail/:bid",
-    name: "blogDetail",
-    component: () => import("@/views/BlogDetail"),
-  },
-  {
-    path: "/addEssay",
-    name: "addEssay",
-    component: () => import("@/views/AddEssay"),
-  },
-  {
-    path: "/addProject",
-    name: "addProject",
-    component: () => import("@/views/AddProject"),
-  },
+
   {
     path: "/",
     redirect: "/welcome",

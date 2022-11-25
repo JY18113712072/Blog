@@ -19,8 +19,10 @@ export default {
 
 <style lang="scss" scoped>
 .resume {
+  box-sizing: border-box;
   color: #fff;
   margin: 0 auto;
   width: 800px;
+  overflow: hidden;
 }
 </style>

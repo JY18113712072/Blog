@@ -7,7 +7,12 @@
           <el-input v-model="form.uname" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <el-form-item label="" prop="upwd">
-          <el-input v-model="form.upwd" type="password" placeholder="请输入密码"></el-input>
+          <el-input
+            v-model="form.upwd"
+            type="password"
+            placeholder="请输入密码"
+            @keyup.enter.native="onSubmit"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">Login</el-button>
@@ -29,14 +34,23 @@ export default {
       rules: {
         uname: [
           { required: true, message: "名字都不记得了?", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
+          { min: 1, max: 10, message: "长度在 1 到 10 个字符", trigger: "blur" },
         ],
         upwd: [{ required: true, message: "给LZ输密码", trigger: "change" }],
       },
     };
   },
   methods: {
-    onSubmit() {},
+    onSubmit() {
+      if (this.form.uname === "saury" && this.form.upwd === "saury") {
+        this.$store.commit("Login");
+        localStorage.setItem("token", JSON.stringify({ uname: "saury" }));
+        this.$message.success("登录成功");
+        this.$router.push("/home");
+      } else {
+        this.$message.error("登录失败,账号或密码错误");
+      }
+    },
   },
 };
 </script>

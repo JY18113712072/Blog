@@ -8,10 +8,15 @@
             共&nbsp;<span>{{ blogList.length }}</span
             >&nbsp;篇
           </p>
-          <i class="el-icon-circle-plus-outline" @click="$router.push('/addBlog')"></i>
+          <i
+            class="el-icon-circle-plus-outline"
+            @click="$router.push('/addBlog')"
+            v-if="$store.state.token"
+          ></i>
         </div>
       </header>
       <ul class="list">
+        <li v-show="blogList.length == 0">此标签还没有数据哦~</li>
         <li v-for="item in blogList" :key="item.bid" @click="goDetail(item.bid)">
           <div class="content">
             <p class="title">## &nbsp; {{ item.title }}</p>
@@ -20,7 +25,9 @@
             </p>
             <div class="about">
               <div class="left">
-                <div class="autor"><img src="./images/a.jpg" alt="" /><span>Saury</span></div>
+                <div class="autor" @click="$router.push('/me/myInfo')">
+                  <img src="./images/a.jpg" alt="" /><span>Saury</span>
+                </div>
                 <div class="date">
                   <i class="el-icon-date"></i> <span>{{ item.createTime }}</span>
                 </div>
@@ -41,29 +48,54 @@
     <div class="right">
       <div class="category">
         <div class="title">
-          <span>分类</span><i class="el-icon-circle-plus-outline" @click="addCategory = true"></i>
+          <span>分类</span
+          ><i class="el-icon-circle-plus-outline" @click="addCategory = true" v-if="$store.state.token"></i>
         </div>
         <ul>
-          <li v-for="item in categoryList" :key="item.cid">
-            <img src="./images/a.jpg" alt="" />
-            <span>{{ item.cname }}</span>
-            <span>{{ item.count }}</span>
+          <li @click="blogList = defaultBlogList">
+            <div class="l1">
+              <img src="./images/a.jpg" alt="" />
+              <span> 所有分类 </span>
+            </div>
+            <div class="l2">
+              <span>{{ defaultBlogList.length }}</span>
+            </div>
+          </li>
+          <li v-for="item in categoryList" :key="item.cid" @click="checkcategory(item.cid)">
+            <div class="l1">
+              <img src="./images/a.jpg" alt="" />
+              <span>{{ item.cname }}</span>
+            </div>
+            <div class="l2">
+              <span>{{ item.count }}</span>
+              <i class="el-icon-delete" @click="deleteCategory(item.cid)" v-if="$store.state.token"></i>
+            </div>
           </li>
         </ul>
       </div>
       <div class="tag">
         <div class="title">
-          <span>标签</span> <i class="el-icon-circle-plus-outline" @click="addTag = true"></i>
+          <span>标签</span>
+          <i class="el-icon-circle-plus-outline" @click="addTag = true" v-if="$store.state.token"></i>
         </div>
         <div class="content">
           <el-tag
             type="success"
             effect="dark"
+            :disable-transitions="false"
+            @click="blogList = defaultBlogList"
+          >
+            All
+          </el-tag>
+          <el-tag
+            type="info"
+            effect="dark"
             v-for="{ tagName } in tagList"
             :key="tagName"
-            closable
+            :closable="Boolean($store.state.token)"
             :disable-transitions="false"
             @close="deleteTag(tagName)"
+            @click.native="checkTag(tagName)"
           >
             {{ tagName }}
           </el-tag>
@@ -90,14 +122,18 @@
         </span>
       </el-dialog>
     </div>
-    <a href="#" class="el-icon-top gotop" v-show="!isTop"></a>
+    <GoTop :isTop="isTop" />
   </div>
 </template>
 
 <script>
 import moment from "moment";
+import GoTop from "@/components/GoTop";
 export default {
   name: "Home",
+  components: {
+    GoTop,
+  },
   data() {
     return {
       // 添加分类弹出表示
@@ -110,6 +146,8 @@ export default {
       tagName: "",
       // 博客列表
       blogList: [],
+      // 默认博客列表
+      defaultBlogList: [],
       // 标签列表
       tagList: [],
       // 分类列表
@@ -175,7 +213,8 @@ export default {
           item.tname = JSON.parse(item.tname);
         }
       });
-      this.blogList = data.data.reverse();
+      this.blogList = data.data;
+      this.defaultBlogList = data.data.reverse();
     },
     // 获取标签
     async getTag() {
@@ -187,10 +226,48 @@ export default {
       let { data } = await this.$api.blog.reqGetCategory();
       this.categoryList = data.data;
     },
+    // 删除分类
+    deleteCategory(cid) {
+      this.$confirm("确定删除分类吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$api.blog.reqDelCategory(cid).then(res => {
+            if (res.data.code == 200) {
+              this.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+              this.getCategory();
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    // 选择分类
+    checkcategory(cid) {
+      this.blogList = this.defaultBlogList.filter(item => {
+        return item.cid == cid;
+      });
+    },
     // 查看博客详情
     goDetail(bid) {
       this.$router.push(`blogDetail/${bid}`);
     },
+    // 点击标签
+    checkTag(tagName) {
+      this.blogList = this.defaultBlogList.filter(item => {
+        return item.tname.includes(tagName);
+      });
+    },
+    //
   },
   mounted() {
     this.getBlog();
@@ -262,6 +339,7 @@ export default {
           margin-left: 10px;
           .title {
             color: #333;
+            font-size: 18px;
             cursor: pointer;
             font-weight: bold;
             &:hover {
@@ -270,7 +348,7 @@ export default {
           }
           .spec {
             margin: 20px 0;
-            font-size: 14px;
+            font-size: 16px;
             color: #666;
           }
           .about {
@@ -291,7 +369,7 @@ export default {
                   width: 20px;
                 }
                 span {
-                  font-size: 14px;
+                  font-size: 16px;
                   margin-left: 5px;
                   color: rgb(59, 158, 197);
                   &:hover {
@@ -300,7 +378,7 @@ export default {
                 }
               }
               .date {
-                font-size: 12px;
+                font-size: 14px;
                 color: #666;
                 margin-right: 10px;
               }
@@ -312,6 +390,7 @@ export default {
             }
             .right {
               .el-tag {
+                font-size: 16px;
                 cursor: pointer;
                 &:hover {
                   color: gold;
@@ -346,14 +425,11 @@ export default {
       }
       ul {
         li {
-          &:hover {
-            color: gold;
-          }
           cursor: pointer;
           display: flex;
           align-items: center;
-
-          padding: 10px 10px;
+          justify-content: space-between;
+          padding: 10px;
           border-bottom: 1px solid rgba($color: #666, $alpha: 0.5);
           span {
             font-size: 14px;
@@ -363,8 +439,35 @@ export default {
             margin-right: 10px;
             border-radius: 50%;
           }
-          span:last-child {
-            margin-left: auto;
+          div {
+            display: flex;
+            align-items: center;
+          }
+          div:first-child {
+            font-weight: bold;
+            span:hover {
+              color: orange;
+            }
+          }
+          div:last-child {
+            span {
+              font-weight: bold;
+
+              margin-right: 20px;
+            }
+            i {
+              cursor: pointer;
+              width: 30px;
+              height: 30px;
+              line-height: 30px;
+              text-align: center;
+              color: red;
+              border-radius: 50%;
+              background-color: #eee;
+              &:hover {
+                color: gold;
+              }
+            }
           }
         }
       }
@@ -399,24 +502,6 @@ export default {
           margin: 0 10px 10px 0;
         }
       }
-    }
-  }
-  .gotop {
-    position: fixed;
-    bottom: 50px;
-    right: 50px;
-    cursor: pointer;
-    width: 50px;
-    height: 50px;
-    text-align: center;
-    line-height: 50px;
-    background-color: #fff;
-    border-radius: 50%;
-    font-size: 28px;
-    color: #999;
-    &:hover {
-      color: rgb(255, 180, 6);
-      background-color: #999;
     }
   }
 }

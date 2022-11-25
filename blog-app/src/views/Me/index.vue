@@ -9,9 +9,9 @@
         <li @click="goNav('/me/skills', 1)" :class="{ active: active == 1 }">
           <i class="el-icon-news"></i> <span>技能</span>
         </li>
-        <li @click="goNav('/me/works', 2)" :class="{ active: active == 2 }">
+        <!-- <li @click="goNav('/me/works', 2)" :class="{ active: active == 2 }">
           <i class="el-icon-box"></i> <span>作品</span>
-        </li>
+        </li> -->
         <li @click="goNav('/me/hobby', 3)" :class="{ active: active == 3 }">
           <i class="el-icon-basketball"></i> <span>爱好</span>
         </li>
@@ -75,7 +75,8 @@ export default {
 .me {
   // padding: 40px 0 30px 0;
   min-height: 100vh;
-  display: flex;
+  // display: flex;
+  overflow: hidden;
 
   .nav {
     position: fixed;
@@ -118,9 +119,8 @@ export default {
   }
   .content {
     box-sizing: border-box;
-    padding: 70px 20px 20px 200px;
+    padding: 80px 20px 20px 200px;
     min-height: 100vh;
-    flex: 1;
   }
 }
 .active {
