@@ -1,7 +1,7 @@
 <template>
   <div class="add">
     <div class="info">
-      <mavon-editor v-model="content" />
+      <mavon-editor v-model="content" ref="md" @imgAdd="handleEditorImgAdd" style="z-index: 10000" />
       <el-button type="primary" size="default" @click="addEssay">提交</el-button>
     </div>
   </div>
@@ -9,6 +9,7 @@
 
 <script>
 import moment from "moment";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -24,6 +25,26 @@ export default {
           this.$router.back();
         }
       });
+    },
+    // md添加图片
+    handleEditorImgAdd(pos, $file) {
+      var formdata = new FormData();
+      formdata.append("imgUpload", $file);
+      axios
+        .post("http://127.0.0.1:3000/uploadPic", formdata, {
+          headers: {
+            "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundaryBpq2BI1u5l04wDAq",
+            // name: "imgUpload",
+          },
+        })
+        .then(response => {
+          console.log(response);
+          // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+          if (response.status === 200) {
+            var url = "http://127.0.0.1:3000/" + response.data;
+            this.$refs.md.$img2Url(pos, url);
+          }
+        });
     },
   },
 };

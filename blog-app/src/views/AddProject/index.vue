@@ -28,7 +28,7 @@
         </el-form-item>
       </el-form>
 
-      <mavon-editor ref="md" v-model="form.content" @imgAdd="handleEditorImgAdd" />
+      <mavon-editor style="z-index: 10000" ref="md" v-model="form.content" @imgAdd="handleEditorImgAdd" />
       <el-button type="primary" size="default" @click="addProject">提交</el-button>
     </div>
   </div>

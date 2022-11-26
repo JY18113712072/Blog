@@ -30,6 +30,7 @@
 
       <mavon-editor
         ref="md"
+        style="z-index: 10000"
         v-model="form.content"
         @imgAdd="handleEditorImgAdd"
         @imgDel="handleEditorImgDel"
