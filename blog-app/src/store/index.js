@@ -6,6 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     token: JSON.parse(localStorage.getItem("token")),
+    blogList: [],
   },
   mutations: {
     // 修改用户名
@@ -14,6 +15,9 @@ export default new Vuex.Store({
     },
     Logout(state, value) {
       state.token = null;
+    },
+    SaveBlogList(state, value) {
+      state.blogList = value;
     },
   },
   actions: {},

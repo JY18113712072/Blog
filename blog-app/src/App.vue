@@ -1,4 +1,5 @@
 <template>
+  <!-- :style="{ backgroundImage: `url(${require(`@/assets/images/app/${img}.jpg`)})` }" -->
   <div class="app">
     <Header v-show="!$route.meta.hideHeader"></Header>
     <router-view></router-view>
@@ -12,19 +13,26 @@ export default {
   components: {
     Header,
   },
+  computed: {
+    // 随机壁纸
+    img() {
+      return Math.ceil(Math.random() * 12);
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .app {
-  // padding-top: 50px;
-  background-image: url("./assets/images/app/bgc.jpg");
+  box-sizing: border-box;
+  overflow: hidden;
+  background-image: url("./assets/images/app/1.jpg");
   background-size: cover;
   background-attachment: fixed;
   background-repeat: no-repeat;
   width: 100vw;
   // height: 100vh;
-  display: flex;
-  flex-direction: column;
+  // display: flex;
+  // flex-direction: column;
 }
 </style>

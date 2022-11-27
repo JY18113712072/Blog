@@ -1,5 +1,8 @@
 <template>
   <div class="home">
+    <keep-alive>
+      <Weather />
+    </keep-alive>
     <div class="left">
       <header>
         <span class="title">全部博客</span>
@@ -20,9 +23,7 @@
         <li v-for="item in blogList" :key="item.bid" @click="goDetail(item.bid)">
           <div class="content">
             <p class="title">## &nbsp; {{ item.title }}</p>
-            <p class="spec">
-              {{ item.desc }}
-            </p>
+            <p class="spec">&nbsp;&nbsp;&nbsp;{{ item.desc }}</p>
             <div class="about">
               <div class="left">
                 <div class="autor" @click="$router.push('/me/myInfo')">
@@ -52,18 +53,18 @@
           ><i class="el-icon-circle-plus-outline" @click="addCategory = true" v-if="$store.state.token"></i>
         </div>
         <ul>
-          <li @click="blogList = defaultBlogList">
+          <li @click="blogList = $store.state.blogList">
             <div class="l1">
-              <img src="./images/a.jpg" alt="" />
+              <img src="./images/logo.png" alt="" />
               <span> 所有分类 </span>
             </div>
             <div class="l2">
-              <span>{{ defaultBlogList.length }}</span>
+              <span>{{ $store.state.blogList.length }}</span>
             </div>
           </li>
-          <li v-for="item in categoryList" :key="item.cid" @click="checkcategory(item.cid)">
-            <div class="l1">
-              <img src="./images/a.jpg" alt="" />
+          <li v-for="item in categoryList" :key="item.cid">
+            <div class="l1" @click="checkcategory(item.cid)">
+              <img src="./images/logo1.png" alt="" />
               <span>{{ item.cname }}</span>
             </div>
             <div class="l2">
@@ -81,15 +82,15 @@
         <div class="content">
           <el-tag
             type="success"
-            effect="dark"
+            effect="light"
             :disable-transitions="false"
-            @click="blogList = defaultBlogList"
+            @click="blogList = $store.state.blogList"
           >
             All
           </el-tag>
           <el-tag
-            type="info"
-            effect="dark"
+            :type="tagColor[coloIndex()]"
+            effect="light"
             v-for="{ tagName } in tagList"
             :key="tagName"
             :closable="Boolean($store.state.token)"
@@ -107,7 +108,7 @@
         <el-input v-model="categoryName" placeholder="请输入分类名" size="normal" clearable></el-input>
 
         <span slot="footer">
-          <el-button @click="addCategory = false">取消</el-button>
+          <el-button @click="cancelAdd">取消</el-button>
           <el-button type="primary" @click="handleAddC">确定</el-button>
         </span>
       </el-dialog>
@@ -117,7 +118,7 @@
         <el-input v-model="tagName" placeholder="请输入标签名" size="normal" clearable></el-input>
 
         <span slot="footer">
-          <el-button @click="addTag = false">取消</el-button>
+          <el-button @click="cancelAdd">取消</el-button>
           <el-button type="primary" @click="handleAddT">确定</el-button>
         </span>
       </el-dialog>
@@ -129,10 +130,12 @@
 <script>
 import moment from "moment";
 import GoTop from "@/components/GoTop";
+import Weather from "@/components/Weather";
 export default {
   name: "Home",
   components: {
     GoTop,
+    Weather,
   },
   data() {
     return {
@@ -145,25 +148,32 @@ export default {
       // 添加标签名字
       tagName: "",
       // 博客列表
-      blogList: [],
+      blogList: this.$store.state.blogList,
       // 默认博客列表
-      defaultBlogList: [],
+      // defaultBlogList: [],
       // 标签列表
       tagList: [],
       // 分类列表
       categoryList: [],
-
       // 是否在顶部
       isTop: true,
+      // tag的颜色
+      tagColor: ["", "info", "warning", "danger"],
     };
   },
+
   methods: {
+    // 随机获取1-5
+    coloIndex() {
+      return Math.floor(Math.random() * 5);
+    },
     // 添加分类回调
     handleAddC() {
       this.addCategory = false;
       this.$api.blog.reqAddCategory({ cname: this.categoryName }).then(res => {
         if (res.data.code == 200) {
           this.$message.success("添加成功");
+          this.categoryName = "";
           this.getCategory();
         }
       });
@@ -174,9 +184,17 @@ export default {
       this.$api.blog.reqAddTag({ tagName: this.tagName }).then(res => {
         if (res.data.code == 200) {
           this.$message.success("添加成功");
+          this.tagName = "";
           this.getTag();
         }
       });
+    },
+    // 取消添加
+    cancelAdd() {
+      this.addTag = false;
+      this.addCategory = false;
+      this.tagName = "";
+      this.categoryName = "";
     },
     // 删除标签的回调
     deleteTag(tname) {
@@ -213,8 +231,10 @@ export default {
           item.tname = JSON.parse(item.tname);
         }
       });
-      this.blogList = data.data;
-      this.defaultBlogList = data.data.reverse();
+      this.$store.commit("SaveBlogList", data.data);
+      // console.log(data.data);
+      this.blogList = data.data.reverse();
+      // this.defaultBlogList = data.data.reverse();
     },
     // 获取标签
     async getTag() {
@@ -253,7 +273,7 @@ export default {
     },
     // 选择分类
     checkcategory(cid) {
-      this.blogList = this.defaultBlogList.filter(item => {
+      this.blogList = this.$store.state.blogList.filter(item => {
         return item.cid == cid;
       });
     },
@@ -263,7 +283,7 @@ export default {
     },
     // 点击标签
     checkTag(tagName) {
-      this.blogList = this.defaultBlogList.filter(item => {
+      this.blogList = this.$store.state.blogList.filter(item => {
         return item.tname.includes(tagName);
       });
     },
@@ -286,12 +306,13 @@ export default {
 };
 </script>
 
+<
 <style lang="scss" scoped>
 .home {
   box-sizing: border-box;
   min-height: 100vh;
   background-color: transparent;
-  width: 1000px;
+  width: 1300px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -299,7 +320,7 @@ export default {
   padding-bottom: 20px;
   position: relative;
   > .left {
-    width: 75%;
+    width: 56%;
     background-color: rgba($color: #fff, $alpha: 0.8);
     border-radius: 10px;
 
@@ -332,7 +353,7 @@ export default {
     }
     .list {
       li {
-        border-top: 1px solid rgba($color: #999, $alpha: 0.5);
+        border-top: 1px solid rgba($color: #999, $alpha: 0.7);
         padding: 20px 10px;
         cursor: pointer;
         .content {
@@ -347,9 +368,11 @@ export default {
             }
           }
           .spec {
+            box-sizing: border-box;
+            padding-right: 40px;
             margin: 20px 0;
             font-size: 16px;
-            color: #666;
+            color: #555;
           }
           .about {
             width: 100%;
@@ -390,7 +413,7 @@ export default {
             }
             .right {
               .el-tag {
-                font-size: 16px;
+                font-size: 14px;
                 cursor: pointer;
                 &:hover {
                   color: gold;
@@ -403,9 +426,9 @@ export default {
     }
   }
   > .right {
-    width: 23%;
+    width: 20%;
     .category {
-      background-color: rgba($color: #fff, $alpha: 0.7);
+      background-color: rgba($color: #fff, $alpha: 0.8);
       border-radius: 10px;
       padding: 10px;
       margin-bottom: 20px;
@@ -473,7 +496,7 @@ export default {
       }
     }
     .tag {
-      background-color: rgba($color: #fff, $alpha: 0.7);
+      background-color: rgba($color: #fff, $alpha: 0.8);
       border-radius: 10px;
       padding: 10px;
       .title {
@@ -500,6 +523,7 @@ export default {
           }
           cursor: pointer;
           margin: 0 10px 10px 0;
+          font-weight: bold;
         }
       }
     }

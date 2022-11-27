@@ -73,6 +73,7 @@ export default {
       let form = { createTime: moment().format("YYYY-MM-DD"), content: this.content };
       this.$api.note.reqAddNote(form).then(res => {
         if (res.data.code == 200) {
+          this.content = "";
           this.$message.success("发表成功");
           this.getNote();
         }

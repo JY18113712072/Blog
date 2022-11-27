@@ -81,7 +81,7 @@ export default {
 
 <style lang="scss" scoped>
 .header {
-  z-index: 2000;
+  z-index: 999;
   height: 7vh;
   background-color: rgba($color: #aaa, $alpha: 0.5);
   display: flex;

@@ -16,8 +16,9 @@ import api from "@/api";
 Vue.prototype.$api = api;
 // 图片路径自定义指全局令
 Vue.directive("src", (el, bindings) => {
-  el.src = "http://127.0.0.1:3000/" + bindings.value;
+  el.src = "http://47.108.228.255:3000/" + bindings.value;
 });
+Vue.prototype.$url = "http://47.108.228.255:3000/";
 
 Vue.config.productionTip = false;
 

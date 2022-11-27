@@ -71,6 +71,7 @@ export default {
 
 <style lang="scss" scoped>
 .project {
+  z-index: 900;
   box-sizing: border-box;
   width: 800px;
   min-height: 100vh;
@@ -133,15 +134,19 @@ export default {
       .desc {
         font-size: 16px;
         color: #333;
-        margin: 10px 0;
+        margin: 15px 0;
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
       .tech {
-        font-size: 16px;
+        font-size: 14px;
         color: #999;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
     }
   }

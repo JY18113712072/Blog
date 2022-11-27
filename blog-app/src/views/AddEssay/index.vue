@@ -31,7 +31,7 @@ export default {
       var formdata = new FormData();
       formdata.append("imgUpload", $file);
       axios
-        .post("http://127.0.0.1:3000/uploadPic", formdata, {
+        .post(this.$url + "uploadPic", formdata, {
           headers: {
             "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundaryBpq2BI1u5l04wDAq",
             // name: "imgUpload",
@@ -41,7 +41,7 @@ export default {
           console.log(response);
           // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
           if (response.status === 200) {
-            var url = "http://127.0.0.1:3000/" + response.data;
+            var url = this.$url + response.data;
             this.$refs.md.$img2Url(pos, url);
           }
         });

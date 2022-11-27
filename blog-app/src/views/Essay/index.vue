@@ -90,6 +90,7 @@ export default {
 
 <style lang="scss" scoped>
 .essay {
+  z-index: 900;
   box-sizing: border-box;
   min-height: 100vh;
   width: 1000px;

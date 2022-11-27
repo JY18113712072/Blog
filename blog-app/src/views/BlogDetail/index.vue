@@ -67,8 +67,7 @@ export default {
     this.$api.blog.reqGetABlog(this.$route.params.bid).then(res => {
       this.blogDetail = res.data.data[0];
       // 发送请求访问量+1
-      this.blogDetail.watch += 1;
-      this.$api.blog.reqUpdataBlog(this.blogDetail);
+      this.$api.blog.reqUpdataBlog({ bid: this.blogDetail.bid, watch: this.blogDetail.watch + 1 });
     });
 
     // 绑定滚动监听事件，滚动到顶部时不显示按钮

@@ -9,11 +9,11 @@
           <el-input type="text" v-model="form.techStack" placeholder="请输入项目技术栈"></el-input>
         </el-form-item>
         <el-form-item prop="desc">
-          <el-input type="textarea" v-model="form.desc" placeholder="简单描述一下吧"></el-input>
+          <el-input type="textarea" :rows="4" v-model="form.desc" placeholder="简单描述一下吧"></el-input>
         </el-form-item>
         <el-form-item>
           <el-upload
-            action="http://127.0.0.1:3000/uploadPic"
+            :action="this.$url + 'uploadPic'"
             list-type="picture-card"
             name="imgUpload"
             :on-preview="handlePictureCardPreview"
@@ -77,20 +77,19 @@ export default {
     },
     // md添加图片
     handleEditorImgAdd(pos, $file) {
-      var formdata = new FormData();
+      let formdata = new FormData();
       formdata.append("imgUpload", $file);
       axios
-        .post("http://127.0.0.1:3000/uploadPic", formdata, {
+        .post(this.$url + "uploadPic", formdata, {
           headers: {
             "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundaryBpq2BI1u5l04wDAq",
-            // name: "imgUpload",
           },
         })
         .then(response => {
-          console.log(response);
+          // console.log(response);
           // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
           if (response.status === 200) {
-            var url = "http://127.0.0.1:3000/" + response.data;
+            var url = this.$url + response.data;
             this.$refs.md.$img2Url(pos, url);
           }
         });
@@ -99,6 +98,7 @@ export default {
     // 添加项目
     addProject() {
       this.form.createTime = moment().format("YYYY-MM-DD");
+
       if (this.$route.params.pid) {
         this.$api.project.reqUpdateProject(this.form).then(res => {
           if (res.data.code == 200) {
