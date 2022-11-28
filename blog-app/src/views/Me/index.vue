@@ -6,6 +6,9 @@
         <li @click="goNav('/me/myInfo', 0)" :class="{ active: active == 0 }">
           <i class="el-icon-notebook-2"></i> <span>资料</span>
         </li>
+        <li @click="goNav('/me/resume', 4)" :class="{ active: active == 4 }">
+          <i class="el-icon-document"></i> <span>简历</span>
+        </li>
         <li @click="goNav('/me/skills', 1)" :class="{ active: active == 1 }">
           <i class="el-icon-news"></i> <span>技能</span>
         </li>
@@ -14,9 +17,6 @@
         </li> -->
         <li @click="goNav('/me/hobby', 3)" :class="{ active: active == 3 }">
           <i class="el-icon-basketball"></i> <span>爱好</span>
-        </li>
-        <li @click="goNav('/me/resume', 4)" :class="{ active: active == 4 }">
-          <i class="el-icon-document"></i> <span>简历</span>
         </li>
       </ul>
     </div>
