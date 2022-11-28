@@ -43,7 +43,6 @@ Vue.use(Button);
 Vue.use(Form);
 Vue.use(FormItem);
 Vue.use(Tag);
-
 Vue.use(Row);
 Vue.use(Col);
 Vue.use(Upload);
