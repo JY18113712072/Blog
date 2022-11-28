@@ -8,6 +8,7 @@
         reverse
         v-for="item in essayList"
         :key="item.eid"
+        color="#fff"
       >
         <el-card body-style="padding:0;position:relative">
           <mavon-editor
@@ -138,22 +139,7 @@ export default {
     color: gold;
   }
 }
-.gotop {
-  position: fixed;
-  bottom: 50px;
-  right: 150px;
-  cursor: pointer;
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  line-height: 50px;
-  background-color: #fff;
-  border-radius: 50%;
-  font-size: 28px;
-  color: #999;
-  &:hover {
-    color: rgb(255, 180, 6);
-    background-color: #999;
-  }
+:deep .el-timeline-item__timestamp {
+  color: #fff;
 }
 </style>

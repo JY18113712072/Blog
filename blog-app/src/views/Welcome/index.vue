@@ -4,9 +4,11 @@
 
     <div>
       <div class="title"><span>欢迎来到Sauryの个人博客</span></div>
-      <div class="intr"><span>新手上路,请多指教</span></div>
-      <div class="go" @click="$router.push('/home')">
-        <i class="el-icon-success"></i><span>点击开始</span>
+      <div class="intr"><span>不会打球的前端开发不是一个好摄影师</span></div>
+      <div class="go">
+        <div @click="$router.push('/me/resume')"><i class="el-icon-tickets"></i><span>查看简历</span></div>
+
+        <div @click="$router.push('/home')"><i class="el-icon-success"></i><span>点击开始</span></div>
       </div>
     </div>
   </div>
@@ -54,24 +56,30 @@ export default {
       }
     }
     .intr {
+      letter-spacing: 3px;
       font-size: 20px;
-      color: #ddd;
+      color: #fff;
     }
     .go {
       cursor: pointer;
-      &:hover {
+      div:hover {
         color: gold;
       }
-      margin: 50px;
+      margin: 70px;
       font-size: 50px;
-      color: #ddd;
+      color: #fff;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       span {
         margin: 0 10px;
         font-size: 24px;
         line-height: 50px;
+      }
+      div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
   }

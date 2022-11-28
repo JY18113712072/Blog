@@ -205,7 +205,10 @@ export default {
     if (this.$route.params.bid) {
       this.$api.blog.reqGetABlog(this.$route.params.bid).then(res => {
         let result = res.data.data[0];
-        result.tname = JSON.parse(result.tname);
+        do {
+          result.tname = JSON.parse(result.tname);
+        } while (!result.tname instanceof Array);
+
         this.form = result;
       });
     }

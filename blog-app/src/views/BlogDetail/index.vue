@@ -1,5 +1,5 @@
 <template>
-  <div class="detail">
+  <div class="detail" v-if="blogDetail">
     <nav>
       <a href="#" class="el-icon-top" v-show="!isTop"></a>
 
@@ -15,7 +15,6 @@
       <i class="el-icon-back" @click="$router.push('/home')"></i><span>{{ blogDetail.title }}</span>
     </header>
     <mavon-editor
-      v-if="blogDetail"
       :value="blogDetail.content"
       defaultOpen="preview"
       :boxShadow="false"

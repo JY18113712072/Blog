@@ -149,8 +149,7 @@ export default {
       tagName: "",
       // 博客列表
       blogList: this.$store.state.blogList,
-      // 默认博客列表
-      // defaultBlogList: [],
+
       // 标签列表
       tagList: [],
       // 分类列表
@@ -228,13 +227,13 @@ export default {
       data.data.forEach(item => {
         item.createTime = moment(item.createTime).format("YYYY-MM-DD");
         if (item.tname) {
-          item.tname = JSON.parse(item.tname);
+          do {
+            item.tname = JSON.parse(item.tname);
+          } while (!item.tname instanceof Array);
         }
       });
       this.$store.commit("SaveBlogList", data.data);
-      // console.log(data.data);
       this.blogList = data.data.reverse();
-      // this.defaultBlogList = data.data.reverse();
     },
     // 获取标签
     async getTag() {

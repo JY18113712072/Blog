@@ -1,5 +1,5 @@
 <template>
-  <div class="skills">这个人很懒,还没有写额.....</div>
+  <div class="skills"></div>
 </template>
 
 <script>
