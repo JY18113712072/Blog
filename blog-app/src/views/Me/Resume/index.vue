@@ -1,8 +1,8 @@
 <template>
   <div class="resume">
-    <pdf style="margin-top: 10px" src="/static/1.pdf" :page="1"></pdf>
-    <pdf style="margin-top: 10px" src="/static/1.pdf" :page="2"></pdf>
-    <pdf style="margin-top: 10px" src="/static/1.pdf" :page="3"></pdf>
+    <pdf style="margin-top: 10px" src="/static/resume.pdf" :page="1"></pdf>
+    <pdf style="margin-top: 10px" src="/static/resume.pdf" :page="2"></pdf>
+    <pdf style="margin-top: 10px" src="/static/resume.pdf" :page="3"></pdf>
   </div>
 </template>
 

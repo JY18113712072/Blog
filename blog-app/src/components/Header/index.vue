@@ -18,8 +18,8 @@
         <i class="el-icon-potato-strips"></i><span>关于我</span>
       </li>
     </ul>
-    <div class="right" v-if="!$store.state.token">
-      <a href="" @click.prevent="$router.push('/login')">Login</a>
+    <div class="right" v-if="!$store.state.token" @click.prevent="$router.push('/login')">
+      <a href="">Login</a>
     </div>
     <el-dropdown class="right" style="background-color: transparent" v-else>
       <img style="width: 30px; border-radius: 50%" src="./images/a.jpg" alt="" />
@@ -121,6 +121,12 @@ export default {
     }
   }
   .right {
+    &:hover {
+      a {
+        color: gold;
+      }
+    }
+    cursor: pointer;
     width: 100px;
     height: 30px;
     background-color: rgba($color: #999, $alpha: 0.5);
@@ -128,9 +134,6 @@ export default {
     text-align: center;
     font-size: 16px;
     a {
-      &:hover {
-        color: gold;
-      }
       color: rgb(213, 211, 211);
     }
   }

@@ -6,9 +6,13 @@
       <div class="title"><span>欢迎来到Sauryの个人博客</span></div>
       <div class="intr"><span>不会打球的前端开发不是一个好摄影师</span></div>
       <div class="go">
-        <div @click="$router.push('/me/resume')"><i class="el-icon-tickets"></i><span>查看简历</span></div>
+        <div @click="$router.push('/me/resume')">
+          <el-icon class="el-icon-tickets"></el-icon><span>查看简历</span>
+        </div>
 
-        <div @click="$router.push('/home')"><i class="el-icon-success"></i><span>点击开始</span></div>
+        <div @click="$router.push('/home')">
+          <el-icon class="el-icon-success"></el-icon><span>点击开始</span>
+        </div>
       </div>
     </div>
   </div>
