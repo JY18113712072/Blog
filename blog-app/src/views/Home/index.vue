@@ -89,9 +89,9 @@
             All
           </el-tag>
           <el-tag
-            :type="tagColor[coloIndex()]"
+            :type="tagColor[index % 4]"
             effect="light"
-            v-for="{ tagName } in tagList"
+            v-for="({ tagName }, index) in tagList"
             :key="tagName"
             :closable="Boolean($store.state.token)"
             :disable-transitions="false"
@@ -162,10 +162,6 @@ export default {
   },
 
   methods: {
-    // 随机获取1-5
-    coloIndex() {
-      return Math.floor(Math.random() * 5);
-    },
     // 添加分类回调
     handleAddC() {
       this.addCategory = false;
